@@ -1,0 +1,13 @@
+<?php
+
+return [
+    'url' => 'https://mechanicalturk.amazonaws.com',
+    'AWSAcessKeyId' => '',
+    'Service' => 'AWSMEchanicalTurkRequester',
+    'Operation' => '',
+    'Name' => '', 
+    'Description' => '', 
+    'Keywords' =>'',
+    'QualificationTypeStatus' => 'Active', 
+    'AutoGranted' => 'false'
+];

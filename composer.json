@@ -1,0 +1,8 @@
+{ 
+    "require": { 
+        "guzzle/guzzle": "v3.8.1"
+    },
+    "autoload": {
+        "psr-0": { "": "src/" }
+    }
+}
