@@ -7,46 +7,53 @@ use Guzzle\Http\Client;
 $conf = require __DIR__.'/config/parameters.php';
 
 $client = new Client();
-$method = 'post';
 $url = $conf['url'];
+$key = $conf['key'];
+
+unset($conf['key']);
 unset($conf['url']);
 
-$request = $client->$method($url);
+$request = $client->get($url, [], [ 'debug' => true ]);
 $query = $request->getQuery();
 
+$creds = generateSig($conf, $key);
+
 $additonalParams = [
-    'Signature' => generateSig($conf, $url, $method),
-    'Timestamp' => getDateTime(),
+    'Signature' => $creds[0],
+    'Timestamp' => $creds[1],
 ];
 
-ksort(array_merge($conf, $additonalParams));
+$params = array_merge($conf, $additonalParams);
+ksort($params);
 
-foreach ($conf as $k => $v) {
+
+foreach ($params as $k => $v) {
     $query->add($k, $v);
 }
 
+try { 
 $response = $request->send();
-
 var_dump($response->getBody(true));
+} catch (\Exception $e) {
+    var_dump($e->getResponse()->getBody(true));
+}
+/**
+ *  
+ */
+function generateSig(array $conf, $key) { 
 
-function generateSig(array $conf, $url, $method) { 
-    $hmacString = $conf['Service'].$conf['Operation'].getDateTime();
-    $canonicalQ = implode('&', $conf);
-    $key = "$method\n$url\n$canonicalQ}";
+    $ts = getDateTime();
+    $hmacString = $conf['Service'].$conf['Operation'].$ts;
 
-    $hmac = hash_hmac('sha256', $hmacString, $key, true);
+    $hmac = hash_hmac('sha1', $hmacString, $key, true);
 
-    $sig = urlencode(base64_encode($hmac));
+    $sig = base64_encode($hmac);
 
-    return $sig;
+
+    return [$sig, $ts];
 }
 
-function getDateTime(){
-    $date = new \DateTime();
-    return $date->format('Y-m-d');
+function getDateTime($format = 'Y-m-d\TH:i:s\Z'){
+    $date = new \DateTime('now', new DateTimeZone('UTC'));
+    return $date->format($format);
 }
-
-
-
-
-
