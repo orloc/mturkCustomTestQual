@@ -44,7 +44,6 @@ function generateSig(array $conf, $key) {
 
     $ts = getDateTime();
     $hmacString = $conf['Service'].$conf['Operation'].$ts;
-
     $hmac = hash_hmac('sha1', $hmacString, $key, true);
 
     $sig = base64_encode($hmac);
