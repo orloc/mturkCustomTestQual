@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<QuestionForm xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd">
+    <Overview>
+        <Title>Pre-Screening Form</Title>
+        <Text>You will now answer questions pertaining to your health and history with cigarettes. Please answer all questions as accurately as possible.</Text>
+    </Overview>
+    <Question>
+        <QuestionIdentifier>DOB</QuestionIdentifier>
+        <IsRequired>true</IsRequired>
+        <QuestionContent>
+            <Text>How old are you?</Text>
+        </QuestionContent>
+        <AnswerSpecification>
+            <FreeTextAnswer>
+                <Constraints>
+                    <IsNumeric minValue="18"/>
+                </Constraints>
+            </FreeTextAnswer>
+        </AnswerSpecification>
+    </Question>
+
+    <Question>
+        <QuestionIdentifier>smoking_length</QuestionIdentifier>
+        <IsRequired>true</IsRequired>
+        <QuestionContent>
+            <Text>How long have you been a regular smoker (smoked cigarettes every day, excluding quit attempts and illness):____________ (in years)</Text>
+        </QuestionContent>
+        <AnswerSpecification>
+            <SelectionAnswer>
+                <StyleSuggestion>radiobutton</StyleSuggestion>
+                <Selections>
+                    <Selection>
+                        <SelectionIdentifier>1d_6m</SelectionIdentifier>
+                        <Text>Between One Day to Six Months</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>6m_1y</SelectionIdentifier>
+                        <Text>Between Six Months to One Year</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>1y_2y</SelectionIdentifier>
+                        <Text></Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>2y_5y</SelectionIdentifier>
+                        <Text>Above Two Year but Less than Five Years</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>5y_10y</SelectionIdentifier>
+                        <Text>Above Two Year but Less than Five Years</Text>
+                    </Selection>
+
+                    <Selection>
+                        <SelectionIdentifier>over_10y</SelectionIdentifier>
+                        <Text>Over Ten Years</Text>
+                    </Selection>
+                </Selections>
+            </SelectionAnswer>
+        </AnswerSpecification>
+    </Question>
+
+    <Question>
+        <QuestionIdentifier>smoking_days_avergage</QuestionIdentifier>
+        <IsRequired>true</IsRequired>
+        <QuestionContent>
+            <Text>On the days that you currently smoke, on average, how many cigarettes do you smoke?</Text>
+        </QuestionContent>
+        <AnswerSpecification>
+            <SelectionAnswer>
+                <StyleSuggestion>radiobutton</StyleSuggestion>
+                <Selections>
+                    <Selection>
+                        <SelectionIdentifier>1pd</SelectionIdentifier>
+                        <Text>One Cigarette per day</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>1_5pd</SelectionIdentifier>
+                        <Text>Between One and Five Cigarettes per day</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>5_10pd</SelectionIdentifier>
+                        <Text>Between Five and Ten Cigarettes per day</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>10_15pd</SelectionIdentifier>
+                        <Text>Between Ten and Fifteen Cigarettes per day</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>15_20pd</SelectionIdentifier>
+                        <Text>Between Fifteen and Cigarettes Ten per days</Text>
+                    </Selection>
+
+                    <Selection>
+                        <SelectionIdentifier>20_40pd</SelectionIdentifier>
+                        <Text>Between Twenty and Fourty per days</Text>
+                    </Selection>
+                </Selections>
+            </SelectionAnswer>
+        </AnswerSpecification>
+    </Question>
+
+    <Question>
+        <QuestionIdentifier>attempt_quit_count</QuestionIdentifier>
+        <IsRequired>true</IsRequired>
+        <QuestionContent>
+            <Text>How many times have you tried to quit smoking? It is okay to estimate, include every instance where you decided you where going to stop smoking completely and afterwards returned to smoking regularly.</Text>
+        </QuestionContent>
+        <AnswerSpecification>
+            <SelectionAnswer>
+                <StyleSuggestion>radiobutton</StyleSuggestion>
+                <Selections>
+                    <Selection>
+                        <SelectionIdentifier>never</SelectionIdentifier>
+                        <Text>Never</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>once</SelectionIdentifier>
+                        <Text>Only Once</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>1_5</SelectionIdentifier>
+                        <Text>Between One and Five times</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>5_10</SelectionIdentifier>
+                        <Text>Between Five and Ten times</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>10_20</SelectionIdentifier>
+                        <Text>Between Ten and Twenty times</Text>
+                    </Selection>
+                    <Selection>
+                        <SelectionIdentifier>20over</SelectionIdentifier>
+                        <Text>Over Twenty Times</Text>
+                    </Selection>
+                </Selections>
+            </SelectionAnswer>
+        </AnswerSpecification>
+    </Question>
+</QuestionForm>
