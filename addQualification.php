@@ -62,11 +62,15 @@ if (!checkValidRequest($response)){
 // =====================================================
 
 function getQualifcationTypeId(Response $response){ 
+    $xmlString = responseToXml();
     
+    $data = parseXMLResponse($xmlString, 'QualificationType/QualificationTypeId');
+
+    return count($data) == 30 ? $data : false;
 }
 
 function checkValidRequest(Response $response) { 
-    $xmlString = $response->getBody(true);
+    $xmlString = responseToXml();
 
     $data = parseXMLResponse($xmlString, 'QualificationType/Request/IsValid');
 
@@ -76,6 +80,10 @@ function checkValidRequest(Response $response) {
 
     return false;
 }
+
+function responseToXml(Response $response) { 
+    return $response->getBody(true);
+ }
 
 function parseXMLResponse($data, $path){ 
     if ($data instanceof Response) { 
