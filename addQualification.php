@@ -8,6 +8,26 @@ use Guzzle\Http\Message\Response;
 
 $conf = require __DIR__.'/config/parameters.php';
 
+// prep our http client and grab some things
+
+$client = new Client();
+$dec = new Colors();
+
+$url = $conf['url'];
+$key = $conf['key'];
+
+$awsAKId = $conf['AWSAccessKeyId'];
+
+foreach ($conf as $k => $config) { 
+    if (is_array($config)){ 
+        $conf[$k]['AWSAccessKeyId']= $awsAKId;
+    }
+}
+
+/*
+ * Creates a Qualification Type 
+ * Defined in the corresponding XML Documents
+ */
 $qual = __DIR__.'/resources/qualifcations/questionairre.xml';
 $answ = __DIR__.'/resources/qualifcations/answers.xml';
 
@@ -15,20 +35,7 @@ $answ = __DIR__.'/resources/qualifcations/answers.xml';
 $qualXml = simplexml_load_file($qual);
 $answXml = simplexml_load_file($answ);
 
-
-// prep our http client and grab some things
-$client = new Client();
-$dec = new Colors();
-$url = $conf['url'];
-$key = $conf['key'];
-
-unset($conf['key']);
-unset($conf['url']);
-
-
-// -- Generate our request
-
-$creds = generateSig($conf, $key);
+$creds = generateSig($conf['QualificationType'], $key);
 
 $additonalParams = [
     'Signature' => $creds[0],
@@ -38,17 +45,16 @@ $additonalParams = [
     'TestDurationInSeconds' => '1000'
 ];
 
-$params = array_merge($conf, $additonalParams);
+$params = array_merge($conf['QualificationType'], $additonalParams);
 ksort($params);
 
 $request = $client->post($url, [], $params,[ 'debug' => true ]);
 
 $response = tryAWSRequest($request);
 
+//===========================
 
-// make sure we have a good response from AWS 
-// grab the id from the request if successful
-if (!checkValidRequest($response)){
+if (!checkValidRequest($response, 'QualificationType')){
     $code = parseXMLResponse($response, 'QualificationType/Request/Errors/Error/Code');
     $message = parseXMLResponse($response, 'QualificationType/Request/Errors/Error/Message');
 
@@ -56,23 +62,27 @@ if (!checkValidRequest($response)){
     echo $dec->getColoredString(sprintf("Code: %s\nMessage: %s\n\n", $code, $message), 'cyan');
 
 } else { 
-    
+        echo $dec->getColoredString(sprintf("\nSuccess! \nStatus Code: %s \n\n", $response->getStatusCode()), 'green');
 }
 
 // =====================================================
 
 function getQualifcationTypeId(Response $response){ 
-    $xmlString = responseToXml();
-    
-    $data = parseXMLResponse($xmlString, 'QualificationType/QualificationTypeId');
+    $data = parseXMLResponse($response, 'QualificationType/QualificationTypeId');
 
     return count($data) == 30 ? $data : false;
 }
 
-function checkValidRequest(Response $response) { 
-    $xmlString = responseToXml();
+function checkValidRequest(Response $response, $requestType) { 
+    $types = [ 
+        'QualificationType'
+    ];
 
-    $data = parseXMLResponse($xmlString, 'QualificationType/Request/IsValid');
+    if (!in_array($requestType, $types)) { 
+        throw new \Exception('Request type not supported');
+    }
+
+    $data = parseXMLResponse($response, "$requestType/Request/IsValid");
 
     if (!is_array($data) && strtolower($data) != 'false'){
         return true;
@@ -86,9 +96,7 @@ function responseToXml(Response $response) {
  }
 
 function parseXMLResponse($data, $path){ 
-    if ($data instanceof Response) { 
-        $data = $data->getBody(true);
-    }
+    $data = responseToXml($data);
 
     $xml = simplexml_load_string($data);
 
@@ -99,7 +107,6 @@ function parseXMLResponse($data, $path){
         $ret[] = (string)$node;
     } 
 
-
     return count($ret) > 1 ? $ret : $ret[0];
 }
 
@@ -109,7 +116,6 @@ function tryAWSRequest(Request $request) {
     
     try { 
         $response = $request->send();
-        echo $dec->getColoredString(sprintf("\nSuccess! \nStatus Code: %s \n\n", $response->getStatusCode()), 'green');
 
         return $response;
     } catch (\Guzzle\Http\Exception\CurlException  $e) {
@@ -119,6 +125,7 @@ function tryAWSRequest(Request $request) {
         echo $dec->getColoredString("\n\nGeneral Error:\n", 'red');
         var_dump($e->getMessage());
     }
+    die;
 }
 
 function generateSig(array $conf, $key) { 

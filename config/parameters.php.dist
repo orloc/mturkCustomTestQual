@@ -2,12 +2,30 @@
 
 return [
     'url' => 'https://mechanicalturk.amazonaws.com',
-    'AWSAcessKeyId' => '',
-    'Service' => 'AWSMEchanicalTurkRequester',
-    'Operation' => '',
-    'Name' => '', 
-    'Description' => '', 
-    'Keywords' =>'',
-    'QualificationTypeStatus' => 'Active', 
-    'AutoGranted' => 'false'
+    'AWSAccessKeyId' => '',
+    'key' => '',
+    'QualificationType' => [
+        'Service' => 'AWSMechanicalTurkRequester',
+        'Operation' => 'CreateQualificationType',
+        'Name' => '', 
+        'Description' => '', 
+        'Keywords' =>'',
+        'QualificationTypeStatus' => '', 
+        'AutoGranted' => ''
+    ],
+    'HIT' => [
+        'Service' => 'AWSMechanicalTurkRequester',
+        'Operation' => 'CreateHIT', 
+        'Title' => '',
+        'Description' => '',
+        'Question' => null, 
+        'HITLayoutId' => '', 
+        'HITLayoutParamter' => '',
+        'Reward' => null,
+        'AssignmentDurationInSeconds' => 60,
+        'LifetimeInSeconds' => 30,
+        'Keywords' => '',
+        'MaxAssignments' => 40,
+        'AutoApprovalDelayInSeconds' => 2540000,
+    ]
 ];
