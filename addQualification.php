@@ -62,7 +62,10 @@ if (!checkValidRequest($response, 'QualificationType')){
     echo $dec->getColoredString(sprintf("Code: %s\nMessage: %s\n\n", $code, $message), 'cyan');
 
 } else { 
-        echo $dec->getColoredString(sprintf("\nSuccess! \nStatus Code: %s \n\n", $response->getStatusCode()), 'green');
+    echo $dec->getColoredString(sprintf("\nSuccess! \nStatus Code: %s \n\n", $response->getStatusCode()), 'green');
+
+    $hitQuestion = __DIR__.'/resources/hits/question.xml';
+        
 }
 
 // =====================================================

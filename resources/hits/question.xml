@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<QuestionForm xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd">
+    <Overview>
+        <Title>Pre-Screening Form</Title>
+        <Text>You will now answer questions pertaining to your health and history with cigarettes. Please answer all questions as accurately as possible.</Text>
+    </Overview>
+    <Question>
+        <QuestionIdentifier>DOB</QuestionIdentifier>
+        <IsRequired>true</IsRequired>
+        <QuestionContent>
+            <Text>How old are you?</Text>
+        </QuestionContent>
+        <AnswerSpecification>
+            <FreeTextAnswer>
+            </FreeTextAnswer>
+        </AnswerSpecification>
+    </Question>
+</QuestionForm>
