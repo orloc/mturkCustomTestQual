@@ -65,6 +65,12 @@ if (!checkValidRequest($response, 'QualificationType')){
     echo $dec->getColoredString(sprintf("\nSuccess! \nStatus Code: %s \n\n", $response->getStatusCode()), 'green');
 
     $hitQuestion = __DIR__.'/resources/hits/question.xml';
+
+    $qXml = simplexml_load_file($hitQuestion);
+
+    $creds = generateSig($conf['HIT'], $key);
+
+    $additionalParams
         
 }
 
