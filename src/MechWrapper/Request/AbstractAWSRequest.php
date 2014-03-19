@@ -21,8 +21,8 @@ abstract class AbstractAWSRequest extends Request {
         'Operation'
     ];
 
-    public function __construct(array $config = array(), $debug = false) { 
-        if (!self::checkRequiredKeys($config)) { 
+    public function __construct(array $config, array $required, $debug = false) { 
+        if (!self::checkRequiredKeys($required, $config)) { 
             throw new \Exception(sprintf("Config must contain: %s", implode(self::$required_keys, ', ')));
         }
 
@@ -47,6 +47,7 @@ abstract class AbstractAWSRequest extends Request {
     }
 
     public function prepareRequest(array $params, $method = 'post') { 
+
         $client = new Client();
         $method = strtolower($method); 
         
@@ -85,9 +86,7 @@ abstract class AbstractAWSRequest extends Request {
         return $this->debug;
     }
 
-    abstract public function checkRequestParamms(array $config);
-
-    public static function checkRequiredKeys(array $config) { 
-        return count(array_intersect_key(array_flip(static::$required_keys), $config)) === count(static::$required_keys);
+    public static function checkRequiredKeys(array $config, array $required) { 
+        return count(array_intersect_key(array_flip($required), $config)) === count($required);
     }
 }
