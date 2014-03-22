@@ -9,7 +9,7 @@ use MechWrapper\Utility\Colors;
 
 abstract class AbstractAWSRequest { 
 
-    const AWSLiveUrl = 'https://mechanicalturk.amazonnaws.com';
+    const AWSLiveUrl = 'https://mechanicalturk.amazonaws.com';
     const AWSDebugUrl = 'https://mechanicalturk.sandbox.amazonaws.com';
 
     protected $activeUrl;
@@ -42,31 +42,23 @@ abstract class AbstractAWSRequest {
             : self::AWSLiveUrl;
     }
 
-    public function generateSig() { 
-        $ts = $this->getDateTime();
-        $hmacString = $this->config['Service'].$this->config['Operation'].$ts;
-        $hmac = hash_hmac('sha1', $hmacString, $this->config['AWSKey'], true);
-
-        $sig = base64_encode($hmac);
-
-        return [$sig, $ts];
-    }
 
     public function getDateTime($format = 'Y-m-d\TH:i:s\Z'){
-        $date = new \DateTime('now', new DateTimeZone('UTC'));
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
         return $date->format($format);
     }
 
     public function prepareRequest($method = 'post') { 
-
         $client = new Client();
         $method = strtolower($method); 
         
+        $this->generateSig();   
+
         $params = $this->config;
         unset($params['AWSKey']);
         ksort($params);
 
-        $this->request = $client->$method($this->getUrl(), $params, [
+        $this->request = $client->$method($this->getUrl(), [], $params, [
             'debug' => $this->isDebug() === true ? 'true': 'false' 
         ]);
 
@@ -74,18 +66,16 @@ abstract class AbstractAWSRequest {
     }
 
     // @TODO I should not have this type of output
-    public function trySendRequest(){
-        $request = $this->request;
+    public function trySendRequest(Request $request){
         $dec = new Colors();
         try { 
             $response = $request->send();
 
             return $response;
         } catch (\Guzzle\Http\Exception\CurlException  $e) {
-            var_dump($e->getMessage());
-            echo $dec->getColoredString("\n\nError:\n", 'red');
+            echo $dec->getColoredString(sprintf("\n\nError :\n %s", $e->getMessage()), 'red');
         } catch (\Exception $e) {
-            echo $dec->getColoredString("\n\nGeneral Error:\n", 'red');
+            echo $dec->getColoredString(sprintf("\n\nGeneral Error:\n%s", $e->getMessage()), 'red');
         }
         die;
     }
@@ -93,7 +83,8 @@ abstract class AbstractAWSRequest {
     public function addConfigParam($key, $val) { 
         if (!isset($this->config[$key])){ 
             $this->config[$key] = $val;
-            return $this->getConfig();
+
+            return $this;
         }
         return false;
     }
@@ -103,7 +94,7 @@ abstract class AbstractAWSRequest {
             $xml = simplexml_load_file($xml);
             $this->addConfigParam($key, (string)$xml->asXml());
 
-            return $this->getConfig();
+            return $this;
         }
 
         return false;
@@ -124,5 +115,16 @@ abstract class AbstractAWSRequest {
 
     public static function checkRequiredKeys(array $required, array $config) { 
         return count(array_intersect_key(array_flip($required), $config)) === count($required);
+    }
+
+    private function generateSig() { 
+        $ts = $this->getDateTime();
+        $hmacString = $this->config['Service'].$this->config['Operation'].$ts;
+        $hmac = hash_hmac('sha1', $hmacString, $this->config['AWSKey'], true);
+
+        $sig = base64_encode($hmac);
+
+        $this->addConfigParam('Signature', $sig)
+            ->addConfigParam('Timestamp', $ts); 
     }
 }
