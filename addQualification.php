@@ -11,9 +11,7 @@ $conf = require __DIR__.'/config/parameters.php';
 // prep our http client and grab some things
 
 $client = new Client();
-$dec = new Colors();
 
-$url = $conf['url'];
 $key = $conf['key'];
 
 $awsAKId = $conf['AWSAccessKeyId'];
@@ -24,10 +22,6 @@ foreach ($conf as $k => $config) {
     }
 }
 
-/*
- * Creates a Qualification Type 
- * Defined in the corresponding XML Documents
- */
 $qual = __DIR__.'/resources/qualifcations/questionairre.xml';
 $answ = __DIR__.'/resources/qualifcations/answers.xml';
 
@@ -47,6 +41,8 @@ $additonalParams = [
 
 $params = array_merge($conf['QualificationType'], $additonalParams);
 ksort($params);
+
+var_dump($params);die;
 
 $request = $client->post($url, [], $params,[ 'debug' => true ]);
 
@@ -70,7 +66,6 @@ if (!checkValidRequest($response, 'QualificationType')){
 
     $creds = generateSig($conf['HIT'], $key);
 
-    $additionalParams
         
 }
 
@@ -129,10 +124,8 @@ function tryAWSRequest(Request $request) {
         return $response;
     } catch (\Guzzle\Http\Exception\CurlException  $e) {
         echo $dec->getColoredString("\n\nError:\n", 'red');
-        var_dump($e);
     } catch (\Exception $e) {
         echo $dec->getColoredString("\n\nGeneral Error:\n", 'red');
-        var_dump($e->getMessage());
     }
     die;
 }
