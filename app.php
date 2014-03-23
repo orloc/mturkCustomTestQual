@@ -18,9 +18,12 @@ $qualResponse = new TurkResponse($response, 'QualificationType');
 if ($qualResponse->isValid()) { 
     $qualTypeId = $qualResponse->getXmlPath('QualificationType/QualificationTypeId');
 
-    $hit = new Command\Hit($conf['Hit']);
+    $reward = $conf['Hit']['Reward'];
+    unset($conf['Hit']['Reward']);
 
-    $hit->addQualificationRequirement($qualTypeId);
+    $hit = new Command\Hit($conf['Hit']);
+    $hit->addQualificationRequirement($qualTypeId)
+        ->addReward($reward);
 
     
 } else { 
