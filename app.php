@@ -2,6 +2,7 @@
 require_once __DIR__.'/vendor/autoload.php';
 
 use MechWrapper\Command;
+use MechWrapper\Response\TurkResponse;
 
 $conf = require __DIR__.'/config/parameters.php';
 
@@ -11,8 +12,18 @@ $qType->addQualificationTest(__DIR__.'/resources/qualifcations/questionairre.xml
 $qType->addAnswerKey(__DIR__.'/resources/qualifcations/answers.xml');
 
 
-$request = $qType->prepareRequest();
-$response = $qType->trySendRequest($request);
+$response = $qType->trySendRequest();
 
-var_dump($response->getBody(true));
+$qualResponse = new TurkResponse($response, 'QualificationType');
+if ($qualResponse->isValid()) { 
+    $qualTypeId = $qualResponse->getXmlPath('QualificationType/QualificationTypeId');
+
+    $hit = new Command\Hit($conf['Hit']);
+
+    $hit->addQualificationRequirement($qualTypeId);
+
+    
+} else { 
+    var_dump($qualResponse->getErrors());
+}
 

@@ -42,34 +42,16 @@ abstract class AbstractAWSRequest {
             : self::AWSLiveUrl;
     }
 
-
-    public function getDateTime($format = 'Y-m-d\TH:i:s\Z'){
-        $date = new \DateTime('now', new \DateTimeZone('UTC'));
-        return $date->format($format);
-    }
-
-    public function prepareRequest($method = 'post') { 
-        $client = new Client();
-        $method = strtolower($method); 
-        
-        $this->generateSig();   
-
-        $params = $this->config;
-        unset($params['AWSKey']);
-        ksort($params);
-
-        $this->request = $client->$method($this->getUrl(), [], $params, [
-            'debug' => $this->isDebug() === true ? 'true': 'false' 
-        ]);
-
-        return $this->request;
+    public static function checkRequiredKeys(array $required, array $config) { 
+        return count(array_intersect_key(array_flip($required), $config)) === count($required);
     }
 
     // @TODO I should not have this type of output
-    public function trySendRequest(Request $request){
+    public function trySendRequest($method = 'post') {
+        $this->prepareRequest($method);
         $dec = new Colors();
         try { 
-            $response = $request->send();
+            $response = $this->request->send();
 
             return $response;
         } catch (\Guzzle\Http\Exception\CurlException  $e) {
@@ -100,6 +82,11 @@ abstract class AbstractAWSRequest {
         return false;
     }
 
+    public function getDateTime($format = 'Y-m-d\TH:i:s\Z'){
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
+        return $date->format($format);
+    }
+
     public function getConfig() { 
         return $this->config;
     }
@@ -112,9 +99,19 @@ abstract class AbstractAWSRequest {
         return $this->debug;
     }
 
+    private function prepareRequest($method) { 
+        $client = new Client();
+        $method = strtolower($method); 
+        
+        $this->generateSig();   
 
-    public static function checkRequiredKeys(array $required, array $config) { 
-        return count(array_intersect_key(array_flip($required), $config)) === count($required);
+        $params = $this->config;
+        unset($params['AWSKey']);
+        ksort($params);
+
+        $this->request = $client->$method($this->getUrl(), [], $params, [
+            'debug' => $this->isDebug() === true ? 'true': 'false' 
+        ]);
     }
 
     private function generateSig() { 
