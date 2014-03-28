@@ -4,29 +4,49 @@ require_once __DIR__.'/vendor/autoload.php';
 use MechWrapper\Command;
 use MechWrapper\Response\TurkResponse;
 
+const debug = true;
+
 $conf = require __DIR__.'/config/parameters.php';
 
-$qType = new Command\QualificationType($conf['QualificationType']);
+/*
+$qType = new Command\QualificationType($conf['QualificationType'], debug);
 
 $qType->addQualificationTest(__DIR__.'/resources/qualifcations/questionairre.xml');
 $qType->addAnswerKey(__DIR__.'/resources/qualifcations/answers.xml');
 
 
-$response = $qType->trySendRequest();
+$qResponse = $qType->trySendRequest();
 
-$qualResponse = new TurkResponse($response, 'QualificationType');
+$qualResponse = new TurkResponse($qResponse, 'QualificationType');
+
 if ($qualResponse->isValid()) { 
     $qualTypeId = $qualResponse->getXmlPath('QualificationType/QualificationTypeId');
+ */
+    $reward = $conf['HIT']['Reward'];
+    unset($conf['HIT']['Reward']);
 
-    $reward = $conf['Hit']['Reward'];
-    unset($conf['Hit']['Reward']);
+    $hit = new Command\Hit($conf['HIT'], debug);
 
-    $hit = new Command\Hit($conf['Hit']);
-    $hit->addQualificationRequirement($qualTypeId)
-        ->addReward($reward);
+    $hit->addQualificationRequirement('3J7CG2EHU9QDHWNAF1FJX05WCKHCV9')
+        ->addReward($reward)
+        ->addQuestion(__DIR__.'/resources/hits/question.xml');
+
+
+    $hResponse = $hit->trySendRequest(); 
+
+    $hitResponse = new TurkResponse($hResponse, 'HIT');
+
+    if (!$hitResponse->isValid()) { 
+        var_dump($hitResponse->getErrors());
+    }
+
+    var_dump($hitResponse->getBody());
 
     
+
+  /*  
 } else { 
     var_dump($qualResponse->getErrors());
 }
 
+   */

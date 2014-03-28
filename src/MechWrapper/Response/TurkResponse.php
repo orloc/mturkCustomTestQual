@@ -59,6 +59,10 @@ class TurkResponse {
         ];
     }
 
+    public function getBody() { 
+        return $this->responseToXml();
+    }
+
     private function responseToXml() { 
         return $this->response->getBody(true);
     }

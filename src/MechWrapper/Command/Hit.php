@@ -26,14 +26,14 @@ class Hit extends AbstractAWSRequest {
 
     public function addReward($amount) { 
         $this->addConfigParam('Reward.1.Amount', $amount)
-            ->addConfigParam('Reward.1.Currency', 'USD');
+            ->addConfigParam('Reward.1.CurrencyCode', 'USD');
 
         return $this;
 
     }
 
     public function addQualificationRequirement($qualId) { 
-        $this->addConfigParam('QualificationRequirement.1.QualificationTypeId', $qualID)
+        $this->addConfigParam('QualificationRequirement.1.QualificationTypeId', $qualId)
             ->addConfigParam('QualificationRequirement.1.Comparator', 'Exists')
             ->addConfigParam('QualificationRequirement.1.RequiredToPreview', true);
 
