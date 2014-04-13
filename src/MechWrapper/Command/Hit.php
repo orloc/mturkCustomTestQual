@@ -32,10 +32,19 @@ class Hit extends AbstractAWSRequest {
 
     }
 
-    public function addQualificationRequirement($qualId) { 
+    public function addQualificationRequirement($qualId, $comp = 'Exists', $compVal = null) { 
+
+        if ($comp != 'Exists' && $compVal === null){ 
+            throw new \Exception('Must specify integer value with comparitor that is non Exists');
+        }
+
         $this->addConfigParam('QualificationRequirement.1.QualificationTypeId', $qualId)
-            ->addConfigParam('QualificationRequirement.1.Comparator', 'Exists')
-            ->addConfigParam('QualificationRequirement.1.RequiredToPreview', true);
+            ->addConfigParam('QualificationRequirement.1.RequiredToPreview', true)
+            ->addConfigParam('QualificationRequirement.1.Comparator', $comp);
+
+        if ($comVal != null){ 
+            $this->addConfigParam('QualificationRequirement.1.IntegerValue', 3);
+        }
 
         return $this;
     }
