@@ -8,7 +8,6 @@ const debug = true;
 
 $conf = require __DIR__.'/config/parameters.php';
 
-/*
 $qType = new Command\QualificationType($conf['QualificationType'], debug);
 
 $qType->addQualificationTest(__DIR__.'/resources/qualifcations/questionairre.xml');
@@ -21,16 +20,13 @@ $qualResponse = new TurkResponse($qResponse, 'QualificationType');
 
 if ($qualResponse->isValid()) { 
     $qualTypeId = $qualResponse->getXmlPath('QualificationType/QualificationTypeId');
- */
     $reward = $conf['HIT']['Reward'];
     unset($conf['HIT']['Reward']);
 
     $hit = new Command\Hit($conf['HIT'], debug);
-
-    $hit->addQualificationRequirement('3J7CG2EHU9QDHWNAF1FJX05WCKHCV9')
+    $hit->addQualificationRequirement($qualTypeId)
         ->addReward($reward)
         ->addQuestion(__DIR__.'/resources/hits/question.xml');
-
 
     $hResponse = $hit->trySendRequest(); 
 
@@ -42,11 +38,6 @@ if ($qualResponse->isValid()) {
 
     var_dump($hitResponse->getBody());
 
-    
-
-  /*  
 } else { 
     var_dump($qualResponse->getErrors());
 }
-
-   */

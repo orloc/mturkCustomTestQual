@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <QuestionForm xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd">
     <Overview>
-        <Title>Pre-Screening Form</Title>
-        <Text>You will now answer questions pertaining to your health and history with cigarettes. Please answer all questions as accurately as possible.</Text>
+        <Title>UB Smoking Survey</Title>
+        <Text>
+            For this assignment you are required to open up a separate window in your browser with the link is a provided below titled Click here to take survey. You will need 15 20 minutes to complete this survey, please make sure you will not be interrupted during this time. After you complete and submit the survey you will be required to come back to this page, so please do not close it before you receive the message HIT submitted. Depending on your browser you may need to hold Ctrl + left click with the mouse on the link to open the survey in a new browser window. Alternatively you can right click with the mouse and select copy link location and paste that into a new browser window.
+        </Text>
     </Overview>
     <Question>
-        <QuestionIdentifier>DOB</QuestionIdentifier>
+        <QuestionIdentifier>surveymonkeycode</QuestionIdentifier>
         <IsRequired>true</IsRequired>
         <QuestionContent>
-            <Text>How old are you?</Text>
+            <Text>Please enter the code you recieved from Survey Monkey after completing the survey.  If you have not done so please visit URL and complete the survey to finish this HIT.</Text>
         </QuestionContent>
         <AnswerSpecification>
             <FreeTextAnswer>
