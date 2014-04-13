@@ -42,10 +42,11 @@ class Hit extends AbstractAWSRequest {
             ->addConfigParam('QualificationRequirement.1.RequiredToPreview', true)
             ->addConfigParam('QualificationRequirement.1.Comparator', $comp);
 
-        if ($comVal != null){ 
-            $this->addConfigParam('QualificationRequirement.1.IntegerValue', 3);
+        if ($compVal != null){ 
+            $this->addConfigParam('QualificationRequirement.1.IntegerValue', $compVal);
         }
 
         return $this;
     }
 }
+

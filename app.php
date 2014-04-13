@@ -24,9 +24,10 @@ if ($qualResponse->isValid()) {
     unset($conf['HIT']['Reward']);
 
     $hit = new Command\Hit($conf['HIT'], debug);
-    $hit->addQualificationRequirement($qualTypeId,'EqualTo', 3)
+    $hit->addQualificationRequirement($qualTypeId,'LessThanOrEqualTo', 3)
         ->addReward($reward)
         ->addQuestion(__DIR__.'/resources/hits/question.xml');
+    
 
     $hResponse = $hit->trySendRequest(); 
 
