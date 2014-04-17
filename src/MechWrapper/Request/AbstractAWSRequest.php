@@ -50,6 +50,7 @@ abstract class AbstractAWSRequest {
     public function trySendRequest($method = 'post') {
         $this->prepareRequest($method);
         $dec = new Colors();
+
         try { 
             $response = $this->request->send();
 
@@ -91,6 +92,10 @@ abstract class AbstractAWSRequest {
         return $this->config;
     }
 
+    public function getRequest(){
+        return $this->request;
+    }
+
     public function getUrl(){ 
         return $this->activeUrl;
     }
@@ -99,7 +104,7 @@ abstract class AbstractAWSRequest {
         return $this->debug;
     }
 
-    private function prepareRequest($method) { 
+    public function prepareRequest($method) { 
         $client = new Client();
         $method = strtolower($method); 
         
@@ -117,6 +122,8 @@ abstract class AbstractAWSRequest {
     private function generateSig() { 
         $ts = $this->getDateTime();
         $hmacString = $this->config['Service'].$this->config['Operation'].$ts;
+
+        var_dump($hmacString);
         $hmac = hash_hmac('sha1', $hmacString, $this->config['AWSKey'], true);
 
         $sig = base64_encode($hmac);

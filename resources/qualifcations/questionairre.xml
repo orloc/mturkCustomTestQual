@@ -85,12 +85,12 @@
                     </Selection>
                     <Selection>
                         <SelectionIdentifier>15_20pd</SelectionIdentifier>
-                        <Text>Between Fifteen and Cigarettes Ten per days</Text>
+                        <Text>Between Fifteen and Twenty Cigarettes per days</Text>
                     </Selection>
 
                     <Selection>
                         <SelectionIdentifier>20_40pd</SelectionIdentifier>
-                        <Text>Between Twenty and Fourty per days</Text>
+                        <Text>Between Twenty and Fourty Cigarettes per days</Text>
                     </Selection>
                 </Selections>
             </SelectionAnswer>

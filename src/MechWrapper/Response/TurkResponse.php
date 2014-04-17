@@ -43,7 +43,7 @@ class TurkResponse {
             $ret[] = (string)$node;
         } 
 
-        return count($ret) > 1 ? $ret : $ret[0];
+        return count($ret) < 1 ? $ret : $ret[0];
     }
 
     public function getRequestType(){ 
